@@ -2,120 +2,85 @@ package app
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"os"
 
-	"github.com/dundee/gdu/v5/build"
 	"github.com/dundee/gdu/v5/common"
 	"github.com/dundee/gdu/v5/device"
-	"github.com/dundee/gdu/v5/stdout"
-	"github.com/dundee/gdu/v5/tui"
-	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
 )
 
 // Flags define flags accepted by Run
 type Flags struct {
 	LogFile          string
 	IgnoreDirs       []string
-	ShowDisks        bool
 	ShowApparentSize bool
-	ShowVersion      bool
 	NoColor          bool
-	NonInteractive   bool
 	NoProgress       bool
 	NoCross          bool
 }
 
 // App defines the main application
 type App struct {
-	Args    []string
-	Flags   *Flags
-	Istty   bool
-	Writer  io.Writer
-	TermApp common.TermApplication
-	Getter  device.DevicesInfoGetter
+	path   string
+	flags  *Flags
+	getter device.DevicesInfoGetter
+	ui     common.UI
+	action Action
 }
 
-// Run starts gdu main logic
+// Action is the action to be performed
+type Action func(a *App) error
+
+// CreateApp creates app struct
+func CreateApp(path string, flags *Flags, ui common.UI, getter device.DevicesInfoGetter) *App {
+	return &App{
+		path:   path,
+		ui:     ui,
+		flags:  flags,
+		getter: getter,
+	}
+}
+
+// SetAction sets action to be run
+func (a *App) SetAction(action Action) {
+	a.action = action
+}
+
+// Run runs the app
 func (a *App) Run() error {
-	if a.Flags.ShowVersion {
-		fmt.Fprintln(a.Writer, "Version:\t", build.Version)
-		fmt.Fprintln(a.Writer, "Built time:\t", build.Time)
-		fmt.Fprintln(a.Writer, "Built user:\t", build.User)
-		return nil
+	if err := a.setNoCross(a.path); err != nil {
+		return err
 	}
+	a.ui.SetIgnoreDirPaths(a.flags.IgnoreDirs)
 
-	var path string
-
-	f, err := os.OpenFile(a.Flags.LogFile, os.O_RDWR|os.O_CREATE, 0644)
-	if err != nil {
-		return fmt.Errorf("Error opening log file: %w", err)
-	}
-	defer f.Close()
-	log.SetOutput(f)
-
-	if len(a.Args) == 1 {
-		path = a.Args[0]
-	} else {
-		path = "."
-	}
-
-	ui := a.createUI()
-
-	if err := a.setNoCross(path); err != nil {
+	if err := a.action(a); err != nil {
 		return err
 	}
 
-	ui.SetIgnoreDirPaths(a.Flags.IgnoreDirs)
-
-	if err := a.runAction(ui, path); err != nil {
-		return err
-	}
-
-	return ui.StartUILoop()
-}
-
-func (a *App) createUI() common.UI {
-	var ui common.UI
-
-	if a.Flags.NonInteractive || !a.Istty {
-		ui = stdout.CreateStdoutUI(
-			a.Writer,
-			!a.Flags.NoColor && a.Istty,
-			!a.Flags.NoProgress && a.Istty,
-			a.Flags.ShowApparentSize,
-		)
-	} else {
-		ui = tui.CreateUI(a.TermApp, !a.Flags.NoColor, a.Flags.ShowApparentSize)
-
-		if !a.Flags.NoColor {
-			tview.Styles.TitleColor = tcell.NewRGBColor(27, 161, 227)
-		}
-	}
-	return ui
+	return a.ui.StartUILoop()
 }
 
 func (a *App) setNoCross(path string) error {
-	if a.Flags.NoCross {
-		mounts, err := a.Getter.GetMounts()
+	if a.flags.NoCross {
+		mounts, err := a.getter.GetMounts()
 		if err != nil {
 			return fmt.Errorf("Error loading mount points: %w", err)
 		}
 		paths := device.GetNestedMountpointsPaths(path, mounts)
-		a.Flags.IgnoreDirs = append(a.Flags.IgnoreDirs, paths...)
+		a.flags.IgnoreDirs = append(a.flags.IgnoreDirs, paths...)
 	}
 	return nil
 }
 
-func (a *App) runAction(ui common.UI, path string) error {
-	if a.Flags.ShowDisks {
-		if err := ui.ListDevices(a.Getter); err != nil {
-			return fmt.Errorf("Error loading mount points: %w", err)
-		}
-	} else {
-		ui.AnalyzePath(path, nil)
+// ActionAnalyzePath analyzes given path
+func ActionAnalyzePath(a *App) error {
+	a.ui.AnalyzePath(a.path, nil)
+	return nil
+}
+
+// ActionListDevices list devices and shows their usage
+func ActionListDevices(a *App) error {
+	if err := a.ui.ListDevices(a.getter); err != nil {
+		return fmt.Errorf("Error loading mount points: %w", err)
 	}
 	return nil
+
 }
