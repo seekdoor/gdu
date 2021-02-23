@@ -13,6 +13,7 @@ import (
 	"github.com/dundee/gdu/v5/device"
 	"github.com/dundee/gdu/v5/stdout"
 	"github.com/dundee/gdu/v5/tui"
+	"github.com/dundee/gdu/v5/web"
 	"github.com/gdamore/tcell/v2"
 	"github.com/mattn/go-isatty"
 	"github.com/rivo/tview"
@@ -66,6 +67,18 @@ var interactiveCmd = &cobra.Command{
 	},
 }
 
+var webCmd = &cobra.Command{
+	Use:     "web [directory_to_scan]",
+	Aliases: []string{"w"},
+	Short:   "Run in web mode",
+	Long:    `Start http server and open web browser`,
+	Args:    cobra.MaximumNArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ui := web.CreateWebUI(af.ShowApparentSize)
+		return runApp(args, ui, app.ActionAnalyzePath)
+	},
+}
+
 var disksCmd = &cobra.Command{
 	Use:     "disks",
 	Aliases: []string{"d"},
@@ -93,6 +106,16 @@ var interactiveDisksCmd = &cobra.Command{
 	},
 }
 
+var webDisksCmd = &cobra.Command{
+	Use:     "disks",
+	Aliases: []string{"d"},
+	Short:   "Show all mounted disks",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		ui := web.CreateWebUI(af.ShowApparentSize)
+		return runApp(args, ui, app.ActionListDevices)
+	},
+}
+
 func init() {
 	af = &app.Flags{}
 	rootFlags := rootCmd.PersistentFlags()
@@ -106,9 +129,11 @@ func init() {
 
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(interactiveCmd)
+	rootCmd.AddCommand(webCmd)
 	rootCmd.AddCommand(disksCmd)
 
 	interactiveCmd.AddCommand(interactiveDisksCmd)
+	webCmd.AddCommand(webDisksCmd)
 
 	// we are not able to analyze disk usage on Windows and Plan9
 	if runtime.GOOS == "windows" || runtime.GOOS == "plan9" {
