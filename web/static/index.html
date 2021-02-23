@@ -3,8 +3,16 @@
     <head>
         <title>go DiskUsage()</title>
         <link rel=stylesheet href="/style.css" />
+        <script src="app.js" type="text/javascript"></script>
     </head>
     <body>
-        <h1>go DiskUsage()</h1>
+        <h1>go DiskUsage(<span id="status"></span>)</h1>
+
+        <div id="progress">
+        </div>
+
+        <div id="canvas-holder" style="width:40%">
+            <canvas id="chart-area"></canvas>
+        </div>
     </body>
 </html>

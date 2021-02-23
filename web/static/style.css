@@ -1,3 +1,36 @@
+body, html {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font: bold 1.2em Tahoma, Verdana,"Geneva CE",sans-serif;
+}
+
 h1 {
-    color: rgb(36, 121, 208)
+    color: rgb(36, 121, 208);
+    display: box;
+    background: #ddd;
+    padding: 15px;
+    margin: 0px;
+    border-bottom: 1px dotted #666;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.red {
+    color: red;
+}
+
+#progress {
+    display: none;
+    padding: 20px;
+    margin: 100px auto;
+    width: 500px;
+    height: 200px;
+    border: 1px dotted #666;
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
 }

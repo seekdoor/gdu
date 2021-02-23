@@ -47,11 +47,11 @@ type UI struct {
 	progress         *tview.TextView
 	help             *tview.Flex
 	table            *tview.Table
-	currentDir       *analyze.File
 	devices          []*device.Device
 	analyzer         analyze.Analyzer
 	topDir           *analyze.File
 	topDirPath       string
+	currentDir       *analyze.File
 	currentDirPath   string
 	askBeforeDelete  bool
 	ignoreDirPaths   map[string]struct{}
