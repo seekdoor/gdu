@@ -3,8 +3,8 @@ package tui
 import (
 	"path/filepath"
 
-	"github.com/dundee/gdu/v4/analyze"
-	"github.com/dundee/gdu/v4/device"
+	"github.com/dundee/gdu/v5/analyze"
+	"github.com/dundee/gdu/v5/device"
 	"github.com/rivo/tview"
 )
 

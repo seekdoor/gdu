@@ -4,7 +4,7 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/dundee/gdu/v4/analyze"
+	"github.com/dundee/gdu/v5/analyze"
 )
 
 // MockedAnalyzer returns dir with files with diferent size exponents

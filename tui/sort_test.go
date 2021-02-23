@@ -3,8 +3,8 @@ package tui
 import (
 	"testing"
 
-	"github.com/dundee/gdu/v4/internal/testanalyze"
-	"github.com/dundee/gdu/v4/internal/testapp"
+	"github.com/dundee/gdu/v5/internal/testanalyze"
+	"github.com/dundee/gdu/v5/internal/testapp"
 	"github.com/stretchr/testify/assert"
 )
 

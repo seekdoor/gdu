@@ -5,12 +5,12 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/dundee/gdu/v4/analyze"
-	"github.com/dundee/gdu/v4/device"
-	"github.com/dundee/gdu/v4/internal/testanalyze"
-	"github.com/dundee/gdu/v4/internal/testapp"
-	"github.com/dundee/gdu/v4/internal/testdev"
-	"github.com/dundee/gdu/v4/internal/testdir"
+	"github.com/dundee/gdu/v5/analyze"
+	"github.com/dundee/gdu/v5/device"
+	"github.com/dundee/gdu/v5/internal/testanalyze"
+	"github.com/dundee/gdu/v5/internal/testapp"
+	"github.com/dundee/gdu/v5/internal/testdev"
+	"github.com/dundee/gdu/v5/internal/testdir"
 	"github.com/gdamore/tcell/v2"
 	"github.com/stretchr/testify/assert"
 )
