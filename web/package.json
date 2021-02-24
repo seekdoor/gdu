@@ -1,0 +1,35 @@
+{
+  "name": "gdu",
+  "version": "5.0.0",
+  "description": "Disk usage analyzer with console and web interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dundee/gdu.git"
+  },
+  "keywords": [
+    "disk",
+    "usage"
+  ],
+  "author": "Daniel Milde",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dundee/gdu/issues"
+  },
+  "homepage": "https://github.com/dundee/gdu#readme",
+  "devDependencies": {
+    "@types/chart.js": "^2.9.30",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "esbuild": "^0.8.51"
+  },
+  "dependencies": {
+    "chart.js": "^2.9.4",
+    "react": "^17.0.1",
+    "react-chartjs-2": "^2.11.1",
+    "react-dom": "^17.0.1"
+  }
+}

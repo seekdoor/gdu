@@ -56,6 +56,7 @@ func (ui *UI) handleWs(conn *websocket.Conn) {
 		err := jsonD.Decode(msg)
 		if err != nil {
 			log.Printf("Error parsing websocket message: %s", err.Error())
+			break
 		}
 
 		println(msg.MsgType)

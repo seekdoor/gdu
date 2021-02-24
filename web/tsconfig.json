@@ -1,0 +1,9 @@
+{
+  "files": ["src/main.ts"],
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "target": "es5"
+  }
+}

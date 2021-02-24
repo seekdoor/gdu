@@ -21,8 +21,12 @@ h1 {
     color: red;
 }
 
+.green {
+    color: green;
+}
+
 #progress {
-    display: none;
+    display: flex;
     padding: 20px;
     margin: 100px auto;
     width: 500px;
