@@ -37,10 +37,10 @@ func CreateWebUI(showApparentSize bool) *UI {
 func (ui *UI) StartUILoop() error {
 	addr := "127.0.0.1:8888"
 
-	// err := openBrowser("http://" + addr)
-	// if err != nil {
-	// 	return err
-	// }
+	err := openBrowser("http://" + addr)
+	if err != nil {
+		return err
+	}
 	http.Handle("/ws", websocket.Handler(ui.handleWs))
 	http.Handle("/", http.FileServer(getFileSystem()))
 	log.Printf("Starting web server on %s", addr)
